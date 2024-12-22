@@ -5,6 +5,19 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
     username: { type: String, unique: true, required: true },
+    email: {
+        type: String,
+        unique: true,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(
+                    value
+                );
+            },
+            message: (props) => `${props.value} is not a valid email address!`,
+        },
+    },
     password: {
         type: String,
         required: true,

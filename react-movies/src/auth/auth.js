@@ -1,44 +1,49 @@
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    updateProfile,
-} from "firebase/auth";
-import { auth } from "../firebase/firebase";
+export const logIn = async (email, password) => {
+    try {
+        const response = await fetch("http://localhost:8080/api/users", {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({ email, password }), // Changed from username to email
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.msg || "Login failed");
+        }
+
+        const data = await response.json();
+        localStorage.setItem("token", data.token); // Store JWT
+        return data;
+    } catch (err) {
+        console.error("Login error:", err.message);
+        throw err;
+    }
+};
 
 export const signUp = async (email, password, username) => {
     try {
-        // Create user with email and password
-        const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
+        const response = await fetch(
+            "http://localhost:8080/api/users?action=register",
+            {
+                headers: { "Content-Type": "application/json" },
+                method: "POST",
+                body: JSON.stringify({ email, password, username }), // Send email, password, and username
+            }
         );
 
-        await updateProfile(userCredential.user, {
-            displayName: username,
-        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.msg || "Signup failed");
+        }
 
-        console.log("User signed up with username:", username);
-    } catch (error) {
-        console.error("Sign-up error:", error.message);
-        throw new Error(error.message);
+        return await response.json();
+    } catch (err) {
+        console.error("Signup error:", err.message);
+        throw err;
     }
 };
 
-export const logIn = async (email, password) => {
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-        console.error(error.message);
-        throw new Error(error.message);
-    }
-};
-
-export const logOut = async () => {
-    try {
-        await signOut(auth);
-    } catch (error) {
-        console.error(error.message);
-    }
+export const logOut = () => {
+    localStorage.removeItem("token");
+    console.log("Logged out successfully");
 };
