@@ -1,15 +1,15 @@
 # Assignment 2 - Web API.
 
-Name: Your Name
+Name: Josh Crotty
 
 ## Features.
 
 A bullet-point list of the ADDITIONAL features you have implemented in the API **THAT WERE NOT IN THE LABS** (or modifications to existing features)
- 
- + Feature 1 
- + Feature 2 
- + Feature 3 
- + etc
+
+-   Feature 1
+-   Feature 2
+-   Feature 3
+-   etc
 
 ## Setup requirements.
 
@@ -21,22 +21,25 @@ Describe any configuration that needs to take place before running the API. For 
 
 REMEMBER: DON'T PUT YOUR OWN USERNAMES/PASSWORDS/AUTH KEYS IN THE README OR ON GITHUB, just placeholders as indicated below:
 
-______________________
+---
+
 NODEENV=development
 PORT=8080
 HOST=
 mongoDB=YourMongoURL
 seedDb=true
 secret=YourJWTSecret
-______________________
+
+---
 
 ## API Design
-Give an overview of your web API design, perhaps similar to the following: 
 
-- /api/movies | GET | Gets a list of movies 
-- /api/movies/{movieid} | GET | Gets a single movie 
-- /api/movies/{movieid}/reviews | GET | Get all reviews for movie 
-- /api/movies/{movieid}/reviews | POST | Create a new review for Movie 
+Give an overview of your web API design, perhaps similar to the following:
+
+-   /api/movies | GET | Gets a list of movies
+-   /api/movies/{movieid} | GET | Gets a single movie
+-   /api/movies/{movieid}/reviews | GET | Get all reviews for movie
+-   /api/movies/{movieid}/reviews | POST | Create a new review for Movie
 
 If you have your API design on an online platform or graphic, please link to it (e.g. [Swaggerhub](https://app.swaggerhub.com/)).
 
@@ -50,4 +53,4 @@ Describe how you integrated your React app with the API. List the views that use
 
 ## Independent learning (if relevant)
 
-Briefly explain any non-standard features developed for the app.   
+Briefly explain any non-standard features developed for the app.
