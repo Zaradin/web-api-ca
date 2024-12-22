@@ -1,23 +1,23 @@
-import React from "react";
+import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
-import Spinner from "../spinner";
-import { auth } from "../../firebase/firebase";
-import { useAuthState } from "react-firebase-hooks/auth"; // Optional hook for easier Firebase auth state handling
 
 const ProtectedRoute = ({ children }) => {
-    const [user, loading] = useAuthState(auth); // Hook that gives us the current user and loading status
+    const token = localStorage.getItem("token");
 
-    if (loading) {
-        return <Spinner />;
-    }
-
-    // If no authenticated user redirect to the login page
-    if (!user) {
+    if (!token) {
         return <Navigate to="/login" />;
     }
 
-    // If authenticated, render the children (protected content)
-    return children;
+    try {
+        const decoded = jwtDecode(token);
+        if (!decoded || Date.now() >= decoded.exp * 1000) {
+            throw new Error("Token is invalid or expired");
+        }
+
+        return children;
+    } catch (error) {
+        return <Navigate to="/login" />;
+    }
 };
 
 export default ProtectedRoute;

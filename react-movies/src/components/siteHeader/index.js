@@ -12,8 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { auth } from "../../firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import toast from "react-hot-toast";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
@@ -61,26 +59,18 @@ const SiteHeader = ({ history }) => {
 
     // Firebase authentication state listener
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setIsAuthenticated(!!user); // Set authentication state based on user presence
-        });
-
-        return () => unsubscribe(); // Cleanup listener on component unmount
+        const token = localStorage.getItem("token");
+        setIsAuthenticated(!!token); // If token exists, the user is authenticated
     }, []);
 
     // Handle sign out
     const handleSignOut = () => {
-        auth.signOut()
-            .then(() => {
-                setIsAuthenticated(false); // Update state to logged out
-                navigate("/"); // Redirect to home page
-                toast.success("Successfully logged out 🎉", {
-                    duration: 2000,
-                });
-            })
-            .catch((error) => {
-                console.error("Sign out error: ", error);
-            });
+        localStorage.removeItem("token"); // Remove JWT token from localStorage
+        setIsAuthenticated(false); // Update state to logged out
+        navigate("/"); // Redirect to home page
+        toast.success("Successfully logged out 🎉", {
+            duration: 2000,
+        });
     };
 
     return (
