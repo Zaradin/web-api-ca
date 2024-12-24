@@ -130,3 +130,31 @@ export const getMovieCast = async (args) => {
     );
     return response.json();
 };
+
+export const getActorDetails = async (args) => {
+    const [, idPart] = args.queryKey;
+    const { id } = idPart;
+    const response = await fetch(
+        `http://localhost:8080/api/movies/tmdb/getactordetails/${id}`,
+        {
+            headers: {
+                Authorization: window.localStorage.getItem("token"),
+            },
+        }
+    );
+    return response.json();
+};
+
+export const getActorMovieCredits = async (args) => {
+    const [, idPart] = args.queryKey;
+    const { id } = idPart;
+    const response = await fetch(
+        `http://localhost:8080/api/movies/tmdb/getactormoviecredits/${id}`,
+        {
+            headers: {
+                Authorization: window.localStorage.getItem("token"),
+            },
+        }
+    );
+    return response.json();
+};

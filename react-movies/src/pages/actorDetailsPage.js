@@ -1,8 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { getActorDetails } from "../api/tmdb-api";
-import { getActorMovieCredits } from "../api/tmdb-api";
+import { getActorDetails, getActorMovieCredits } from "../api/movies-api";
 import Spinner from "../components/spinner";
 import Typography from "@mui/material/Typography";
 import ActorDetails from "../components/actorDetails";

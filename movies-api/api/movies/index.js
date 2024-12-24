@@ -9,6 +9,8 @@ import {
     getTrendingPeople,
     getNowPlayingMovies,
     getMovieCast,
+    getActorDetails,
+    getActorMovieCredits,
 } from "../tmdb-api";
 
 const router = express.Router();
@@ -86,6 +88,24 @@ router.get(
         const { id } = req.params;
         const movieCast = await getMovieCast(id);
         res.status(200).json(movieCast);
+    })
+);
+
+router.get(
+    "/tmdb/getactordetails/:id",
+    asyncHandler(async (req, res) => {
+        const id = parseInt(req.params.id);
+        const actorDetails = await getActorDetails(id);
+        res.status(200).json(actorDetails);
+    })
+);
+
+router.get(
+    "/tmdb/getactormoviecredits/:id",
+    asyncHandler(async (req, res) => {
+        const id = parseInt(req.params.id);
+        const actorMovieCredits = await getActorMovieCredits(id);
+        res.status(200).json(actorMovieCredits);
     })
 );
 
