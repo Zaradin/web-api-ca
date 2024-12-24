@@ -26,9 +26,9 @@ REMEMBER: DON'T PUT YOUR OWN USERNAMES/PASSWORDS/AUTH KEYS IN THE README OR ON G
 NODEENV=development
 PORT=8080
 HOST=
-mongoDB=YourMongoURL
+mongoDB=mongodb+srv://crottjj:kY1Wf1wERnQ4BKdH@cluster0.gbc02.mongodb.net/tasky?retryWrites=true&w=majority&appName=tasky
 seedDb=true
-secret=YourJWTSecret
+secret=ilikecake
 
 ---
 
@@ -36,10 +36,14 @@ secret=YourJWTSecret
 
 Give an overview of your web API design, perhaps similar to the following:
 
--   /api/movies | GET | Gets a list of movies
--   /api/movies/{movieid} | GET | Gets a single movie
--   /api/movies/{movieid}/reviews | GET | Get all reviews for movie
--   /api/movies/{movieid}/reviews | POST | Create a new review for Movie
+-   /api/movies/movies | GET | Gets a list of movies
+-   /api/movies/tmdb/movie/{movieid} | GET | Gets a single movie
+-   /api/movies/tmdb/upcoming | GET | Get upcoming movies that are being released
+-   /api/movies/tmdb/trendingpeople | GET | Get a list of trending people on TMDB
+-   /api/movies/tmdb/genre | GET | Get a list of different genres of movies and TV Shows on TMDB
+-   /api/movies/tmdb/{title} | GET | Get movies by a search title
+-   /api/movies/tmdb/movie/{movieid}/recommendations | GET | Get a list of recommendated movies similar to movieid
+-   /api/movies/tmdb/nowplaying/{page} | GET | Get a list of movies that are currently playing in theatres
 
 If you have your API design on an online platform or graphic, please link to it (e.g. [Swaggerhub](https://app.swaggerhub.com/)).
 
