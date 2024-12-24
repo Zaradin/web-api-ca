@@ -91,7 +91,7 @@ export const getMovieByTitle = async (title) => {
 };
 
 export const getMovieRecommendations = async (args) => {
-    const [, idPart] = args.queryKey || {};
+    const [, idPart] = args.queryKey;
     if (!idPart) {
         throw new Error("Invalid queryKey: missing id");
     }
