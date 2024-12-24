@@ -64,7 +64,7 @@ async function registerUser(req, res) {
 }
 
 async function authenticateUser(req, res) {
-    const user = await User.findOne({ email: req.body.email }); // Changed from username to email
+    const user = await User.findOne({ email: req.body.email });
     if (!user) {
         return res.status(401).json({
             success: false,

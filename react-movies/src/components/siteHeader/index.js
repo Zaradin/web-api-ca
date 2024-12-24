@@ -57,17 +57,16 @@ const SiteHeader = ({ history }) => {
         setAuthAnchorEl(event.currentTarget);
     };
 
-    // Firebase authentication state listener
     useEffect(() => {
         const token = localStorage.getItem("token");
-        setIsAuthenticated(!!token); // If token exists, the user is authenticated
+        setIsAuthenticated(!!token);
     }, []);
 
     // Handle sign out
     const handleSignOut = () => {
-        localStorage.removeItem("token"); // Remove JWT token from localStorage
-        setIsAuthenticated(false); // Update state to logged out
-        navigate("/"); // Redirect to home page
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
+        navigate("/");
         toast.success("Successfully logged out 🎉", {
             duration: 2000,
         });

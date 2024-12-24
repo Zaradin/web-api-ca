@@ -1,5 +1,5 @@
 import React from "react";
-import { getTrendingPeople } from "../api/tmdb-api";
+import { getTrendingPeople } from "../api/movies-api";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
 import TrendingPageTemplate from "../components/templateTrendingPeople";

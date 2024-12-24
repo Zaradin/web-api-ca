@@ -1,34 +1,21 @@
 import movieModel from "./movieModel";
 import asyncHandler from "express-async-handler";
 import express from "express";
-import { getUpcomingMovies, getMovieGenres } from "../tmdb-api";
+import {
+    getUpcomingMovies,
+    getMovieGenres,
+    getMovies,
+    getTrendingPeople,
+    getNowPlayingMovies,
+} from "../tmdb-api";
 
 const router = express.Router();
 
 router.get(
-    "/",
+    "/movies",
     asyncHandler(async (req, res) => {
-        let { page = 1, limit = 10 } = req.query; // destructure page and limit and set default values
-        [page, limit] = [+page, +limit]; //trick to convert to numeric (req.query will contain string values)
-
-        // Parallel execution of counting movies and getting movies using movieModel
-        const [total_results, results] = await Promise.all([
-            movieModel.estimatedDocumentCount(),
-            movieModel
-                .find()
-                .limit(limit)
-                .skip((page - 1) * limit),
-        ]);
-        const total_pages = Math.ceil(total_results / limit); //Calculate total number of pages (= total No Docs/Number of docs per page)
-
-        //construct return Object and insert into response object
-        const returnObject = {
-            page,
-            total_pages,
-            total_results,
-            results,
-        };
-        res.status(200).json(returnObject);
+        const movies = await getMovies();
+        res.status(200).json(movies);
     })
 );
 
@@ -58,7 +45,24 @@ router.get(
 );
 
 router.get(
-    "/tmdb/genres",
+    "/tmdb/trendingpeople",
+    asyncHandler(async (req, res) => {
+        const trendingPeople = await getTrendingPeople();
+        res.status(200).json(trendingPeople);
+    })
+);
+
+router.get(
+    "/tmdb/nowplaying",
+    asyncHandler(async (req, res) => {
+        const { page = 1 } = req.query;
+        const trendingPeople = await getNowPlayingMovies(page);
+        res.status(200).json(trendingPeople);
+    })
+);
+
+router.get(
+    "/tmdb/genre",
     asyncHandler(async (req, res) => {
         const movieGenres = await getMovieGenres();
         res.status(200).json(movieGenres);

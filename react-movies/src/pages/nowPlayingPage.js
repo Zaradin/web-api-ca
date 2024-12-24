@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getNowPlayingMovies } from "../api/tmdb-api";
+import { getNowPlayingMovies } from "../api/movies-api";
 import PageTemplate from "../components/templateMovieListPage";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
@@ -34,7 +34,7 @@ const NowPlayingPage = () => {
 
     // Handle pagination change
     const handlePageChange = (event, value) => {
-        setPage(value); 
+        setPage(value);
     };
 
     return (

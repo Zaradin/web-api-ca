@@ -13,20 +13,27 @@ import CardContent from "@mui/material/CardContent";
 import { MoviesContext } from "../contexts/moviesContext";
 import { ThemeContext } from "../contexts/themeContext";
 import { getMovie } from "../api/tmdb-api";
+import { jwtDecode } from "jwt-decode";
 import { auth } from "../firebase/firebase";
 
 const AccountDetailsPage = () => {
     const [user, setUser] = useState(null);
     const { favorites } = useContext(MoviesContext);
     const [movieDetails, setMovieDetails] = useState([]);
-    const { mode, toggleTheme } = useContext(ThemeContext); // Access mode from context
+    const { mode, toggleTheme } = useContext(ThemeContext);
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-            setUser(currentUser);
-        });
+        const token = localStorage.getItem("token");
 
-        return () => unsubscribe();
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                setUser(decodedToken);
+            } catch (error) {
+                console.error("Token decoding error:", error);
+                setUser(null);
+            }
+        }
     }, []);
 
     useEffect(() => {
@@ -43,7 +50,7 @@ const AccountDetailsPage = () => {
         }
     }, [favorites]);
 
-    const userNameInitial = user?.displayName?.[0];
+    const userNameInitial = user?.username?.[0];
 
     return (
         <Container maxWidth="lg">
@@ -65,13 +72,14 @@ const AccountDetailsPage = () => {
                             </Avatar>
                         </Box>
                         <Typography variant="h6">
-                            {user?.displayName || "No Username"}
+                            {user?.username || "No Username"}
                         </Typography>
                         <Typography variant="body1">
                             {user?.email || "No Email"}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                            Signed up on: {user?.metadata.creationTime || "N/A"}
+                            Signed up on:{" "}
+                            {/*{user?.metadata.creationTime || "N/A"} */}
                         </Typography>
                         <FormControlLabel
                             control={
