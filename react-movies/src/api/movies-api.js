@@ -14,7 +14,6 @@ export const getMovie = async (args) => {
         throw new Error("Invalid queryKey: missing id");
     }
     const { id } = idPart;
-
     try {
         const response = await fetch(
             `http://localhost:8080/api/movies/tmdb/movie/${id}`,
@@ -24,7 +23,6 @@ export const getMovie = async (args) => {
                 },
             }
         );
-
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -110,6 +108,20 @@ export const getMovieRecommendations = async (args) => {
 export const getNowPlayingMovies = async (page = 1) => {
     const response = await fetch(
         `http://localhost:8080/api/movies/tmdb/nowplaying?page=${page}`,
+        {
+            headers: {
+                Authorization: window.localStorage.getItem("token"),
+            },
+        }
+    );
+    return response.json();
+};
+
+export const getMovieCast = async (args) => {
+    const [, idPart] = args.queryKey;
+    const { id } = idPart;
+    const response = await fetch(
+        `http://localhost:8080/api/movies/tmdb/getmoviecast/${id}`,
         {
             headers: {
                 Authorization: window.localStorage.getItem("token"),

@@ -26,7 +26,7 @@ REMEMBER: DON'T PUT YOUR OWN USERNAMES/PASSWORDS/AUTH KEYS IN THE README OR ON G
 NODEENV=development
 PORT=8080
 HOST=
-mongoDB=mongodb+srv://crottjj:kY1Wf1wERnQ4BKdH@cluster0.gbc02.mongodb.net/tasky?retryWrites=true&w=majority&appName=tasky
+mongoDB=MyMongoDBURL
 seedDb=true
 secret=ilikecake
 

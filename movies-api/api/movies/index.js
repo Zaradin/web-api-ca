@@ -5,8 +5,10 @@ import {
     getUpcomingMovies,
     getMovieGenres,
     getMovies,
+    getMovie,
     getTrendingPeople,
     getNowPlayingMovies,
+    getMovieCast,
 } from "../tmdb-api";
 
 const router = express.Router();
@@ -16,6 +18,15 @@ router.get(
     asyncHandler(async (req, res) => {
         const movies = await getMovies();
         res.status(200).json(movies);
+    })
+);
+
+router.get(
+    "/tmdb/movie/:id",
+    asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const movie = await getMovie(id);
+        res.status(200).json(movie);
     })
 );
 
@@ -66,6 +77,15 @@ router.get(
     asyncHandler(async (req, res) => {
         const movieGenres = await getMovieGenres();
         res.status(200).json(movieGenres);
+    })
+);
+
+router.get(
+    "/tmdb/getmoviecast/:id",
+    asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const movieCast = await getMovieCast(id);
+        res.status(200).json(movieCast);
     })
 );
 

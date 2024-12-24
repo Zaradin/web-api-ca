@@ -15,6 +15,22 @@ export const getMovies = async () => {
     }
 };
 
+export const getMovie = async (id) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_KEY}`
+        );
+
+        if (!response.ok) {
+            throw new Error((await response.json()).message);
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const getUpcomingMovies = async () => {
     try {
         const response = await fetch(
@@ -67,6 +83,21 @@ export const getNowPlayingMovies = async (page = 1) => {
     try {
         const response = await fetch(
             `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.TMDB_KEY}&language=en-US&page=${page}`
+        );
+        if (!response.ok) {
+            throw new Error(response.json().message);
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getMovieCast = async (id) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.TMDB_KEY}`
         );
         if (!response.ok) {
             throw new Error(response.json().message);
