@@ -75,17 +75,19 @@ export const getMovieGenres = async () => {
     return response.json();
 };
 
-//TODO
 export const getMovieByTitle = async (title) => {
+    console.log(title);
     const response = await fetch(
-        `http://localhost:8080/api/movies/tmdb/${title}`,
+        `http://localhost:8080/api/movies/tmdb/getmoviebytitle/${title}`,
         {
             headers: {
                 Authorization: window.localStorage.getItem("token"),
             },
         }
     );
-    return response.json();
+    const data = await response.json();
+
+    return data.results;
 };
 
 export const getMovieRecommendations = async (args) => {

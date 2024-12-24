@@ -11,6 +11,7 @@ import {
     getMovieCast,
     getActorDetails,
     getActorMovieCredits,
+    getMovieByTitle,
 } from "../tmdb-api";
 
 const router = express.Router();
@@ -106,6 +107,15 @@ router.get(
         const id = parseInt(req.params.id);
         const actorMovieCredits = await getActorMovieCredits(id);
         res.status(200).json(actorMovieCredits);
+    })
+);
+
+router.get(
+    "/tmdb/getmoviebytitle/:title",
+    asyncHandler(async (req, res) => {
+        const title = req.params.title;
+        const movie = await getMovieByTitle(title);
+        res.status(200).json(movie);
     })
 );
 

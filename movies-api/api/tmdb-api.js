@@ -138,3 +138,22 @@ export const getActorMovieCredits = async (id) => {
         throw error;
     }
 };
+
+export const getMovieByTitle = async (title) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/search/movie?api_key=${
+                process.env.TMDB_KEY
+            }&query=${encodeURIComponent(title)}`
+        );
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching movie:", error);
+        throw error;
+    }
+};
