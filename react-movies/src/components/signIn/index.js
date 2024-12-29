@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { logIn } from "../../auth/auth";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../contexts/authContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -12,6 +12,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+    const context = useContext(AuthContext);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -21,7 +23,7 @@ const SignIn = () => {
         e.preventDefault();
         setError("");
         try {
-            await logIn(email, password);
+            await context.authenticate(email, password);
             navigate("/");
             toast.success("Logged in successfully! 🎉", {
                 duration: 2000,

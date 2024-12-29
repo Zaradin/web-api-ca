@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -13,19 +13,21 @@ import { styled } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../contexts/authContext";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
-const SiteHeader = ({ history }) => {
+const SiteHeader = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [authAnchorEl, setAuthAnchorEl] = useState(null); // State for auth menu
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const open = Boolean(anchorEl);
     const authOpen = Boolean(authAnchorEl);
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const navigate = useNavigate();
+
+    const { isAuthenticated, signout } = useContext(AuthContext); // Use AuthContext
 
     const menuOptions = [
         { label: "Home", path: "/" },
@@ -57,19 +59,13 @@ const SiteHeader = ({ history }) => {
         setAuthAnchorEl(event.currentTarget);
     };
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        setIsAuthenticated(!!token);
-    }, []);
-
     // Handle sign out
     const handleSignOut = () => {
-        localStorage.removeItem("token");
-        setIsAuthenticated(false);
-        navigate("/");
+        signout();
         toast.success("Successfully logged out 🎉", {
             duration: 2000,
         });
+        navigate("/");
     };
 
     return (

@@ -1,7 +1,7 @@
 import React, { useState, createContext } from "react";
-import { login, signup } from "../api/movies-api";
+import { logIn, signUp } from "../auth/auth.js";
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
     const existingToken = localStorage.getItem("token");
@@ -16,7 +16,7 @@ const AuthContextProvider = (props) => {
     };
 
     const authenticate = async (username, password) => {
-        const result = await login(username, password);
+        const result = await logIn(username, password);
         if (result.token) {
             setToken(result.token);
             setIsAuthenticated(true);
@@ -25,9 +25,9 @@ const AuthContextProvider = (props) => {
     };
 
     const register = async (username, password) => {
-        const result = await signup(username, password);
+        const result = await signUp(username, password);
         console.log(result.code);
-        return result.code == 201 ? true : false;
+        return result.code === 201 ? true : false;
     };
 
     const signout = () => {
