@@ -1,4 +1,6 @@
 import movieModel from "./movieModel";
+import ReviewSchema from "./reviewModel";
+const mongoose = require("mongoose");
 import asyncHandler from "express-async-handler";
 import express from "express";
 import {
@@ -136,24 +138,14 @@ router.post(
         const { author, content, rating } = req.body;
 
         try {
-            const movieId = mongoose.Types.ObjectId(id);
-            const movie = await movieModel.findOne({ _id: movieId });
-
-            if (!movie) {
-                res.status(404).json({ message: "Movie not found" });
-                return;
-            }
-
-            // Create a new review object
-            const newReview = {
+            const newReview = new ReviewSchema({
+                tmdb_id: id,
                 author: author,
                 content: content,
                 rating: rating,
-            };
+            });
+            await newReview.save();
 
-            // Add the review to the movie's reviews array
-            movie.reviews.push(newReview);
-            await movie.save();
             res.status(201).json(newReview);
         } catch (error) {
             console.error("Error saving review:", error);
