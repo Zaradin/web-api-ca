@@ -160,3 +160,31 @@ export const getActorMovieCredits = async (args) => {
     );
     return response.json();
 };
+
+export const addMovieReview = async (id, author, content, rating) => {
+    try {
+        const response = await fetch(
+            `http://localhost:8080/api/movies/tmdb/movie/${id}/reviews`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: window.localStorage.getItem("token"),
+                },
+                body: JSON.stringify({
+                    author: author,
+                    content: content,
+                    rating: rating,
+                }),
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error((await response.json()).message);
+        }
+
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+};

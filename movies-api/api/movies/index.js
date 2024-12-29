@@ -129,4 +129,37 @@ router.get(
     })
 );
 
+router.post(
+    "/tmdb/movie/:id/reviews",
+    asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const { author, content, rating } = req.body;
+
+        try {
+            const movieId = mongoose.Types.ObjectId(id);
+            const movie = await movieModel.findOne({ _id: movieId });
+
+            if (!movie) {
+                res.status(404).json({ message: "Movie not found" });
+                return;
+            }
+
+            // Create a new review object
+            const newReview = {
+                author: author,
+                content: content,
+                rating: rating,
+            };
+
+            // Add the review to the movie's reviews array
+            movie.reviews.push(newReview);
+            await movie.save();
+            res.status(201).json(newReview);
+        } catch (error) {
+            console.error("Error saving review:", error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    })
+);
+
 export default router;
