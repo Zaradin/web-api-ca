@@ -6,10 +6,11 @@ Name: Josh Crotty
 
 A bullet-point list of the ADDITIONAL features you have implemented in the API **THAT WERE NOT IN THE LABS** (or modifications to existing features)
 
--   Feature 1
--   Feature 2
--   Feature 3
--   etc
+-   JWT Authentication
+-   All TMDB API calls moved to the backned
+-   Users can submit movie reviews that are stored in a mongodb collection
+-   Account details page, (Username, email, account creation date, all reviews listed, and user favourites listed) is displayed
+-   
 
 ## Setup requirements.
 
