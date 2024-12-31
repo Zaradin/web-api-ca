@@ -18,7 +18,7 @@ import MovieRecommendationsPage from "./pages/movieRecommendationsPage";
 import SignUp from "./components/signUp";
 import SignIn from "./components/signIn";
 import AccountDetailsPage from "./pages/acountDetailsPage";
-import ProtectedRoute from "./components/protectedRoute";
+import ProtectedRoutes from "./protectedRoutes";
 import SearchPage from "./pages/searchPage";
 import ThemeContextProvider from "./contexts/themeContext";
 import { Toaster } from "react-hot-toast";
@@ -47,10 +47,6 @@ const App = () => {
                                 <Route
                                     path="/reviews/:id"
                                     element={<MovieReviewPage />}
-                                />
-                                <Route
-                                    path="/movies/favorites"
-                                    element={<FavoriteMoviesPage />}
                                 />
                                 <Route
                                     path="/movies/upcoming"
@@ -88,14 +84,17 @@ const App = () => {
                                 />
                                 <Route path="/signup" element={<SignUp />} />
                                 <Route path="/login" element={<SignIn />} />
-                                <Route
-                                    path="/account"
-                                    element={
-                                        <ProtectedRoute>
-                                            <AccountDetailsPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
+
+                                <Route element={<ProtectedRoutes />}>
+                                    <Route
+                                        path="/account"
+                                        element={<AccountDetailsPage />}
+                                    />
+                                    <Route
+                                        path="/movies/favorites"
+                                        element={<FavoriteMoviesPage />}
+                                    />
+                                </Route>
                             </Routes>
                         </MoviesContextProvider>
                     </BrowserRouter>

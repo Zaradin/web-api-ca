@@ -52,6 +52,11 @@ If you have your API design on an online platform or graphic, please link to it 
 
 Give details of authentication/security implemented on the API (e.g. passport/sessions). Indicate which routes are protected.
 
+**Protected Routes:**
+
+-   /movies/favorites
+-   /account
+
 ## Integrating with React App
 
 Describe how you integrated your React app with the API. List the views that use your Web API instead of the TMDB API. Describe any other updates to the React app from Assignment One.
