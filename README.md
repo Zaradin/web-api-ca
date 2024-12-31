@@ -10,7 +10,7 @@ A bullet-point list of the ADDITIONAL features you have implemented in the API *
 -   All TMDB API calls moved to the backned
 -   Users can submit movie reviews that are stored in a mongodb collection
 -   Account details page, (Username, email, account creation date, all reviews listed, and user favourites listed) is displayed
--   
+-   Auth check for adding movies to favorites.
 
 ## Setup requirements.
 
