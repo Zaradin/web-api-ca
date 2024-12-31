@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../api/users/userModel";
 
-const authenticate = async (request, response, next) => {
+export const authenticate = async (request, response, next) => {
     try {
         const authHeader = request.headers.authorization;
         if (!authHeader) throw new Error("No authorization header");
@@ -10,14 +10,15 @@ const authenticate = async (request, response, next) => {
         if (!token) throw new Error("Bearer token not found");
 
         const decoded = await jwt.verify(token, process.env.SECRET);
-        console.log(decoded);
+        console.log(decoded); // This should print the decoded JWT, including email
 
-        // Assuming decoded contains a username field
-        const user = await User.findByUserName(decoded.username);
+        // Instead of decoded.username, use decoded.email (from the JWT)
+        const user = await User.findOne({ email: decoded.email }); // Assuming you're using the email for the User lookup
         if (!user) {
             throw new Error("User not found");
         }
-        // Optionally attach the user to the request for further use
+
+        // Attach the user to the request object
         request.user = user;
         next();
     } catch (err) {

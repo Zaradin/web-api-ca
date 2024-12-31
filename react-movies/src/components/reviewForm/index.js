@@ -90,7 +90,6 @@ const ReviewForm = ({ movie }) => {
 
     const onSubmit = async (data) => {
         data.rating = rating;
-
         try {
             // Convert movie.id to a string
             const movieId = String(movie.id);

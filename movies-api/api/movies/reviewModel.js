@@ -8,6 +8,7 @@ const ReviewSchema = new Schema({
     content: { type: String, required: true },
     rating: { type: Number, required: true },
     date: { type: Date, default: Date.now },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 ReviewSchema.statics.findByMovieId = function (movieId) {

@@ -16,6 +16,7 @@ import {
     getMovieByTitle,
     getMovieRecommendations,
 } from "../tmdb-api";
+import { authenticate } from "../../authenticate/index";
 
 const router = express.Router();
 
@@ -133,9 +134,12 @@ router.get(
 
 router.post(
     "/tmdb/movie/:id/reviews",
+    authenticate,
     asyncHandler(async (req, res) => {
+        console.log(req);
         const { id } = req.params;
         const { author, content, rating } = req.body;
+        const userId = req.user._id;
 
         try {
             const newReview = new ReviewSchema({
@@ -143,6 +147,7 @@ router.post(
                 author: author,
                 content: content,
                 rating: rating,
+                user: userId,
             });
             await newReview.save();
 
