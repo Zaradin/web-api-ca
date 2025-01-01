@@ -23,6 +23,7 @@ import SearchPage from "./pages/searchPage";
 import ThemeContextProvider from "./contexts/themeContext";
 import { Toaster } from "react-hot-toast";
 import AuthContextProvider from "./contexts/authContext";
+import Spinner from "./components/spinner";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -36,7 +37,7 @@ const queryClient = new QueryClient({
 
 const App = () => {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
             <QueryClientProvider client={queryClient}>
                 <AuthContextProvider>
                     <ThemeContextProvider>

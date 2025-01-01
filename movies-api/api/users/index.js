@@ -3,6 +3,7 @@ import User from "./userModel";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import { authenticate } from "../../authenticate/index";
+import ReviewModel from "../movies/reviewModel";
 
 const router = express.Router(); // eslint-disable-line
 
@@ -91,16 +92,15 @@ router.get(
         const userId = req.user._id;
 
         try {
-            const reviews = await ReviewSchema.find({ user: userId }).populate(
-                "tmdb_id",
-                "title"
-            );
+            const userReviews = await ReviewModel.find({ user: userId }).sort({
+                date: -1,
+            });
 
-            if (reviews.length === 0) {
+            if (userReviews.length === 0) {
                 return res.status(404).json({ message: "No reviews found" });
             }
 
-            res.status(200).json(reviews);
+            res.status(200).json(userReviews);
         } catch (error) {
             console.error("Error fetching reviews:", error);
             res.status(500).json({ message: "Internal Server Error" });

@@ -188,3 +188,18 @@ export const addMovieReview = async (id, author, content, rating) => {
         throw error;
     }
 };
+
+export const getUserReviews = async () => {
+    const response = await fetch("http://localhost:8080/api/users/reviews", {
+        headers: {
+            Authorization: window.localStorage.getItem("token"),
+        },
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to fetch user reviews");
+    }
+
+    return response.json();
+};

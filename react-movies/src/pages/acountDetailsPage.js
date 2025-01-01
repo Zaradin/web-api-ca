@@ -12,15 +12,40 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import { MoviesContext } from "../contexts/moviesContext";
 import { ThemeContext } from "../contexts/themeContext";
-import { getMovie } from "../api/tmdb-api";
+import { getMovie } from "../api/movies-api";
 import { jwtDecode } from "jwt-decode";
-import { auth } from "../firebase/firebase";
+import { getUserReviews } from "../api/movies-api";
 
 const AccountDetailsPage = () => {
     const [user, setUser] = useState(null);
     const { favorites } = useContext(MoviesContext);
-    const [movieDetails, setMovieDetails] = useState([]);
+    const [movieDetails, setMovieDetails] = useState([]); // For displaying favorite movies
+    const [userReviews, setUserReviews] = useState([]);
     const { mode, toggleTheme } = useContext(ThemeContext);
+    const [movieDetailsMap, setMovieDetailsMap] = useState({}); // Map of movie details for reviews
+
+    const ratings = [
+        {
+            value: 5,
+            label: "Excellent",
+        },
+        {
+            value: 4,
+            label: "Good",
+        },
+        {
+            value: 3,
+            label: "Average",
+        },
+        {
+            value: 2,
+            label: "Poor",
+        },
+        {
+            value: 0,
+            label: "Terrible",
+        },
+    ];
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -50,6 +75,37 @@ const AccountDetailsPage = () => {
         }
     }, [favorites]);
 
+    useEffect(() => {
+        // Fetch user reviews
+        const fetchReviews = async () => {
+            try {
+                const reviews = await getUserReviews();
+                setUserReviews(reviews);
+
+                // Fetch movie details for each review's tmdb_id
+                const movieIds = reviews.map((review) => review.tmdb_id);
+                const uniqueMovieIds = [...new Set(movieIds)]; // Remove duplicates
+
+                const movies = await Promise.all(
+                    uniqueMovieIds.map((movieId) =>
+                        getMovie({ queryKey: [null, { id: movieId }] })
+                    )
+                );
+
+                const movieDetailsMap = movies.reduce((map, movie) => {
+                    map[movie.id] = movie;
+                    return map;
+                }, {});
+
+                setMovieDetailsMap(movieDetailsMap);
+            } catch (error) {
+                console.error("Error fetching user reviews:", error.message);
+            }
+        };
+
+        fetchReviews();
+    }, []);
+
     const userNameInitial = user?.username?.[0];
 
     return (
@@ -77,10 +133,6 @@ const AccountDetailsPage = () => {
                         <Typography variant="body1">
                             {user?.email || "No Email"}
                         </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            Signed up on:{" "}
-                            {/*{user?.metadata.creationTime || "N/A"} */}
-                        </Typography>
                         <FormControlLabel
                             control={
                                 <Switch
@@ -95,7 +147,8 @@ const AccountDetailsPage = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={8}>
-                    <Paper elevation={3} sx={{ padding: 3 }}>
+                    {/* Favorites Section */}
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 3 }}>
                         <Typography variant="h5" gutterBottom>
                             Your Favorite Movies
                         </Typography>
@@ -143,6 +196,71 @@ const AccountDetailsPage = () => {
                                         </Grid>
                                     ))}
                                 </Grid>
+                            )}
+                        </Box>
+                    </Paper>
+
+                    <Paper elevation={3} sx={{ padding: 3 }}>
+                        <Typography variant="h5">Your Reviews</Typography>
+                        <Box>
+                            {userReviews.length === 0 ? (
+                                <Typography>No reviews yet!</Typography>
+                            ) : (
+                                userReviews.map((review) => {
+                                    const movie =
+                                        movieDetailsMap[review.tmdb_id];
+                                    const ratingLabel =
+                                        ratings.find(
+                                            (rating) =>
+                                                rating.value === review.rating
+                                        )?.label || "No rating";
+                                    return (
+                                        <Paper
+                                            key={review._id}
+                                            elevation={2}
+                                            sx={{
+                                                padding: 2,
+                                                marginBottom: 2,
+                                            }}
+                                        >
+                                            <Typography variant="h6">
+                                                {movie
+                                                    ? movie.title
+                                                    : "Movie not found"}
+                                            </Typography>
+                                            <Typography
+                                                variant="body2"
+                                                color="text.secondary"
+                                            >
+                                                {movie
+                                                    ? `${movie.release_date.slice(
+                                                          0,
+                                                          4
+                                                      )} | Your Rating: ${ratingLabel}`
+                                                    : "No movie details available"}
+                                            </Typography>
+                                            <Typography
+                                                variant="body2"
+                                                color="text.secondary"
+                                            >
+                                                Reviewed by:{" "}
+                                                {review.author || "Anonymous"}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                {review.content}
+                                            </Typography>
+                                            <Typography
+                                                variant="body2"
+                                                color="text.secondary"
+                                            >
+                                                Posted on:{" "}
+                                                {new Date(
+                                                    review.date
+                                                ).toLocaleDateString()}
+                                            </Typography>
+                                        </Paper>
+                                    );
+                                })
                             )}
                         </Box>
                     </Paper>
