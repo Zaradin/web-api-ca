@@ -37,6 +37,8 @@ secret=ilikecake
 
 Give an overview of your web API design, perhaps similar to the following:
 
+**GET** Endpoints
+
 -   /api/movies/movies | GET | Gets a list of movies
 -   /api/movies/tmdb/movie/{movieid} | GET | Gets a single movie
 -   /api/movies/tmdb/upcoming | GET | Get upcoming movies that are being released
@@ -45,6 +47,10 @@ Give an overview of your web API design, perhaps similar to the following:
 -   /api/movies/tmdb/{title} | GET | Get movies by a search title
 -   /api/movies/tmdb/movie/{movieid}/recommendations | GET | Get a list of recommendated movies similar to movieid
 -   /api/movies/tmdb/nowplaying/{page} | GET | Get a list of movies that are currently playing in theatres
+
+**POST** Endpoints
+
+-   /api/movies/tmdb/movie/${id}/reviews | POST | Insert a movie review into the mongodb
 
 If you have your API design on an online platform or graphic, please link to it (e.g. [Swaggerhub](https://app.swaggerhub.com/)).
 
@@ -59,7 +65,9 @@ Give details of authentication/security implemented on the API (e.g. passport/se
 
 ## Integrating with React App
 
-Describe how you integrated your React app with the API. List the views that use your Web API instead of the TMDB API. Describe any other updates to the React app from Assignment One.
+All TMDB API calls have been moved to the backend and now use custom API calls in the frontend.
+
+Also, movie reviews are now displayed in the user account details page. Any reviews that user has made will show.
 
 ## Independent learning (if relevant)
 
