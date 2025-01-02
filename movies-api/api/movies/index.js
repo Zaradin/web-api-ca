@@ -1,5 +1,6 @@
 import movieModel from "./movieModel";
 import ReviewSchema from "./reviewModel";
+import favoritesModel from "./favoritesModel";
 const mongoose = require("mongoose");
 import asyncHandler from "express-async-handler";
 import express from "express";
@@ -158,4 +159,19 @@ router.post(
         }
     })
 );
+
+router.post("/addfavorite", async (req, res) => {
+    try {
+        const { movieId } = req.body;
+        const favorites = await favoritesModel.findOneAndUpdate(
+            { userId: req.user.id },
+            { $addToSet: { movieIds: movieId } },
+            { new: true, upsert: true }
+        );
+        res.json(favorites);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to update favorites" });
+    }
+});
+
 export default router;
