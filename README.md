@@ -11,6 +11,7 @@ A bullet-point list of the ADDITIONAL features you have implemented in the API *
 -   Users can submit movie reviews that are stored in a mongodb collection
 -   Account details page, (Username, email, account creation date, all reviews listed, and user favourites listed) is displayed
 -   Auth check for adding movies to favorites.
+-   Users movie reviews are now displayed in the account details page, also with a link to the review page
 
 ## Setup requirements.
 
@@ -48,6 +49,12 @@ Give an overview of your web API design, perhaps similar to the following:
 -   /api/movies/tmdb/movie/{movieid}/recommendations | GET | Get a list of recommendated movies similar to movieid
 -   /api/movies/tmdb/nowplaying/{page} | GET | Get a list of movies that are currently playing in theatres
 
+**USER** Endpoints
+
+-   /api/users/ | POST | register a user or authenticate a user
+-   /api/users/userdetails | GET | Gets the currently logged in user details
+-   /api/users/reviews | GET | Get currently logged in users reviews stored in mongodb
+
 **POST** Endpoints
 
 -   /api/movies/tmdb/movie/${id}/reviews | POST | Insert a movie review into the mongodb
@@ -56,12 +63,18 @@ If you have your API design on an online platform or graphic, please link to it 
 
 ## Security and Authentication
 
-Give details of authentication/security implemented on the API (e.g. passport/sessions). Indicate which routes are protected.
+JWT was used for the security and authentication. For assignment 1, firebase was used, but for assignment two
+I made the slow transition from firebase to my custom JWT authentication functionality.
+
+For the protected routes, the implementation was done within the protectedRoutes react
+component with the use of checking the auth context and using react outlets.
 
 **Protected Routes:**
 
 -   /movies/favorites
 -   /account
+-   /reviews/{id}
+-   /reviews/form
 
 ## Integrating with React App
 
