@@ -43,6 +43,30 @@ router.post(
     })
 );
 
+// This endpoint gets a users details
+router.get("/userdetails", authenticate, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select(
+            "username email createdAt updatedAt"
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Return the user details
+        res.json({
+            username: user.username,
+            email: user.email,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 // Update a user
 router.put("/:id", async (req, res) => {
     if (req.body._id) delete req.body._id;

@@ -13,8 +13,8 @@ import CardContent from "@mui/material/CardContent";
 import { MoviesContext } from "../contexts/moviesContext";
 import { ThemeContext } from "../contexts/themeContext";
 import { getMovie } from "../api/movies-api";
-import { jwtDecode } from "jwt-decode";
 import { getUserReviews } from "../api/movies-api";
+import { getUserDetails } from "../api/movies-api";
 
 const AccountDetailsPage = () => {
     const [user, setUser] = useState(null);
@@ -48,17 +48,18 @@ const AccountDetailsPage = () => {
     ];
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-
-        if (token) {
+        const fetchUserDetails = async () => {
             try {
-                const decodedToken = jwtDecode(token);
-                setUser(decodedToken);
+                const userData = await getUserDetails();
+                console.log(userData);
+                setUser(userData);
             } catch (error) {
-                console.error("Token decoding error:", error);
+                console.error("Error fetching user details:", error);
                 setUser(null);
             }
-        }
+        };
+
+        fetchUserDetails();
     }, []);
 
     useEffect(() => {
@@ -76,15 +77,13 @@ const AccountDetailsPage = () => {
     }, [favorites]);
 
     useEffect(() => {
-        // Fetch user reviews
         const fetchReviews = async () => {
             try {
                 const reviews = await getUserReviews();
                 setUserReviews(reviews);
 
-                // Fetch movie details for each review's tmdb_id
                 const movieIds = reviews.map((review) => review.tmdb_id);
-                const uniqueMovieIds = [...new Set(movieIds)]; // Remove duplicates
+                const uniqueMovieIds = [...new Set(movieIds)];
 
                 const movies = await Promise.all(
                     uniqueMovieIds.map((movieId) =>
@@ -107,6 +106,9 @@ const AccountDetailsPage = () => {
     }, []);
 
     const userNameInitial = user?.username?.[0];
+    const createdAt = user?.createdAt
+        ? new Date(user.createdAt).toLocaleDateString()
+        : "N/A";
 
     return (
         <Container maxWidth="lg">
@@ -133,6 +135,9 @@ const AccountDetailsPage = () => {
                         <Typography variant="body1">
                             {user?.email || "No Email"}
                         </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            Signed up on: {createdAt}
+                        </Typography>
                         <FormControlLabel
                             control={
                                 <Switch
@@ -147,7 +152,6 @@ const AccountDetailsPage = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={8}>
-                    {/* Favorites Section */}
                     <Paper elevation={3} sx={{ padding: 3, marginBottom: 3 }}>
                         <Typography variant="h5" gutterBottom>
                             Your Favorite Movies
@@ -218,10 +222,7 @@ const AccountDetailsPage = () => {
                                         <Paper
                                             key={review._id}
                                             elevation={2}
-                                            sx={{
-                                                padding: 2,
-                                                marginBottom: 2,
-                                            }}
+                                            sx={{ padding: 2, marginBottom: 2 }}
                                         >
                                             <Typography variant="h6">
                                                 {movie

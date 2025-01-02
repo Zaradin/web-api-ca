@@ -203,3 +203,25 @@ export const getUserReviews = async () => {
 
     return response.json();
 };
+
+export const getUserDetails = async () => {
+    try {
+        const response = await fetch(
+            "http://localhost:8080/api/users/userdetails",
+            {
+                headers: {
+                    Authorization: window.localStorage.getItem("token"),
+                },
+            }
+        );
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to fetch user details");
+        }
+
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+};
