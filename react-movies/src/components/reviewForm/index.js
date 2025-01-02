@@ -9,6 +9,8 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { addMovieReview } from "../../api/movies-api";
+import { Navigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ratings = [
     {
@@ -95,7 +97,13 @@ const ReviewForm = ({ movie }) => {
 
             // Use movieId when calling addMovieReview
             await addMovieReview(movieId, data.author, data.review, rating);
-            setOpen(true);
+            //setOpen(true);
+            toast.success("Review added successfully! 🎉", {
+                duration: 2000,
+            });
+            navigate(`/reviews/${movieId}`, {
+                state: { movie, author: data.author, review: data.review },
+            });
         } catch (error) {
             console.error("Error submitting review:", error);
         }

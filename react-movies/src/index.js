@@ -58,11 +58,15 @@ const App = () => {
                                             path="/movies/favorites"
                                             element={<FavoriteMoviesPage />}
                                         />
+                                        <Route
+                                            path="/reviews/:id"
+                                            element={<MovieReviewPage />}
+                                        />
+                                        <Route
+                                            path="/reviews/form"
+                                            element={<AddMovieReviewPage />}
+                                        />
                                     </Route>
-                                    <Route
-                                        path="/reviews/:id"
-                                        element={<MovieReviewPage />}
-                                    />
                                     <Route
                                         path="/movies/upcoming"
                                         element={<UpComingPage />}
@@ -75,10 +79,6 @@ const App = () => {
                                     <Route
                                         path="*"
                                         element={<Navigate to="/" />}
-                                    />
-                                    <Route
-                                        path="/reviews/form"
-                                        element={<AddMovieReviewPage />}
                                     />
                                     <Route
                                         path="/actor/:id"
