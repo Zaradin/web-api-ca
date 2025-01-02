@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -10,6 +11,7 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
+import { Button } from "@mui/material";
 import { MoviesContext } from "../contexts/moviesContext";
 import { ThemeContext } from "../contexts/themeContext";
 import { getMovie } from "../api/movies-api";
@@ -17,6 +19,8 @@ import { getUserReviews } from "../api/movies-api";
 import { getUserDetails } from "../api/movies-api";
 
 const AccountDetailsPage = () => {
+    const navigate = useNavigate();
+
     const [user, setUser] = useState(null);
     const { favorites } = useContext(MoviesContext);
     const [movieDetails, setMovieDetails] = useState([]); // For displaying favorite movies
@@ -105,10 +109,15 @@ const AccountDetailsPage = () => {
         fetchReviews();
     }, []);
 
-    const userNameInitial = user?.username?.[0];
     const createdAt = user?.createdAt
         ? new Date(user.createdAt).toLocaleDateString()
         : "N/A";
+
+    const handleViewReview = (movie, review) => {
+        navigate(`/reviews/${movie.id}`, {
+            state: { movie, review, author: review.author }, // Pass the movie, review, and author to the next page
+        });
+    };
 
     return (
         <Container maxWidth="lg">
@@ -126,7 +135,7 @@ const AccountDetailsPage = () => {
                                     height: 100,
                                 }}
                             >
-                                {userNameInitial}
+                                {user?.username?.[0]}
                             </Avatar>
                         </Box>
                         <Typography variant="h6">
@@ -222,7 +231,11 @@ const AccountDetailsPage = () => {
                                         <Paper
                                             key={review._id}
                                             elevation={2}
-                                            sx={{ padding: 2, marginBottom: 2 }}
+                                            sx={{
+                                                padding: 2,
+                                                marginBottom: 2,
+                                                position: "relative",
+                                            }}
                                         >
                                             <Typography variant="h6">
                                                 {movie
@@ -259,6 +272,26 @@ const AccountDetailsPage = () => {
                                                     review.date
                                                 ).toLocaleDateString()}
                                             </Typography>
+                                            <Box
+                                                sx={{
+                                                    position: "absolute",
+                                                    top: 10,
+                                                    right: 10,
+                                                }}
+                                            >
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        handleViewReview(
+                                                            movie,
+                                                            review
+                                                        )
+                                                    }
+                                                >
+                                                    View Full Review
+                                                </Button>
+                                            </Box>
                                         </Paper>
                                     );
                                 })
