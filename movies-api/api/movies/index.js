@@ -39,21 +39,21 @@ router.get(
 );
 
 // Get movie details
-router.get(
-    "/:id",
-    asyncHandler(async (req, res) => {
-        const id = parseInt(req.params.id);
-        const movie = await movieModel.findByMovieDBId(id);
-        if (movie) {
-            res.status(200).json(movie);
-        } else {
-            res.status(404).json({
-                message: "The movie you requested could not be found.",
-                status_code: 404,
-            });
-        }
-    })
-);
+// router.get(
+//     "/:id",
+//     asyncHandler(async (req, res) => {
+//         const id = parseInt(req.params.id);
+//         const movie = await movieModel.findByMovieDBId(id);
+//         if (movie) {
+//             res.status(200).json(movie);
+//         } else {
+//             res.status(404).json({
+//                 message: "The movie you requested could not be found.",
+//                 status_code: 404,
+//             });
+//         }
+//     })
+// );
 
 router.get(
     "/tmdb/upcoming",
@@ -160,17 +160,33 @@ router.post(
     })
 );
 
-router.post("/addfavorite", async (req, res) => {
+router.post("/addfavorite", authenticate, async (req, res) => {
     try {
         const { movieId } = req.body;
+
         const favorites = await favoritesModel.findOneAndUpdate(
-            { userId: req.user.id },
+            { userId: req.user._id },
             { $addToSet: { movieIds: movieId } },
             { new: true, upsert: true }
         );
         res.json(favorites);
     } catch (error) {
         res.status(500).json({ error: "Failed to update favorites" });
+    }
+});
+
+router.get("/getfavorites", authenticate, async (req, res) => {
+    try {
+        const favorites = await favoritesModel.findOne({
+            userId: req.user._id,
+        });
+        if (!favorites) {
+            return res.status(404).json({ error: "No favorites found" });
+        }
+        res.status(200).json(favorites);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to fetch favorites" });
     }
 });
 

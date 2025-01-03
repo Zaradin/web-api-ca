@@ -225,3 +225,60 @@ export const getUserDetails = async () => {
         throw error;
     }
 };
+
+export const getFavorites = async () => {
+    const response = await fetch(
+        "http://localhost:8080/api/movies/getfavorites",
+        {
+            headers: {
+                Authorization: window.localStorage.getItem("token"),
+            },
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch favorites");
+    }
+
+    return response.json();
+};
+
+export const addFavorite = async (movieId) => {
+    const response = await fetch(
+        "http://localhost:8080/api/movies/addfavorite",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: window.localStorage.getItem("token"),
+            },
+            body: JSON.stringify({ movieId }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to add favorite");
+    }
+
+    return response.json();
+};
+
+export const removeFavorite = async (movieId) => {
+    const response = await fetch(
+        "http://localhost:8080/api/movies/removefavorite",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: window.localStorage.getItem("token"),
+            },
+            body: JSON.stringify({ movieId }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to remove favorite");
+    }
+
+    return response.json();
+};

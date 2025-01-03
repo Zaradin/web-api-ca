@@ -29,16 +29,21 @@ const AddToFavoritesIcon = ({ movie }) => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
-    const handleAddToFavorites = (e) => {
+    const handleAddToFavorites = async (e) => {
         e.preventDefault();
         if (!isAuthenticated) {
             setOpen(true);
             return;
         }
-        context.addToFavorites(movie);
-        toast.success("Added to favorites successfully! 🎉", {
-            duration: 2000,
-        });
+
+        try {
+            await context.addToFavorites(movie); // Await the async operation
+            toast.success("Added to favorites successfully! 🎉", {
+                duration: 2000,
+            });
+        } catch (error) {
+            toast.error("Failed to add to favorites. Please try again.");
+        }
     };
 
     return (

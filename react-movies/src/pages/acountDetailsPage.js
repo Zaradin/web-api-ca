@@ -55,7 +55,6 @@ const AccountDetailsPage = () => {
         const fetchUserDetails = async () => {
             try {
                 const userData = await getUserDetails();
-                console.log(userData);
                 setUser(userData);
             } catch (error) {
                 console.error("Error fetching user details:", error);
