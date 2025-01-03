@@ -13,7 +13,7 @@ const MoviesContextProvider = (props) => {
         const fetchFavorites = async () => {
             try {
                 const data = await getFavorites();
-                setFavorites(data.movieIds || []); // Assuming `movieIds` is the array in your schema
+                setFavorites(data.movieIds || []);
             } catch (error) {
                 console.error("Failed to fetch favorites:", error);
             }
@@ -24,7 +24,6 @@ const MoviesContextProvider = (props) => {
 
     const addToFavorites = async (movie) => {
         try {
-            // Call the API to add the favorite
             const response = await addFavorite(movie.id);
 
             if (!favorites.includes(movie.id)) {
@@ -49,18 +48,13 @@ const MoviesContextProvider = (props) => {
     const addReview = (movie, review) => {
         setMyReviews({ ...myReviews, [movie.id]: review });
     };
-    //console.log(myReviews);
 
-    // We will use this function in the next step
     const removeFromFavorites = async (movie) => {
         try {
-            // Call the backend API to remove the favorite
             const response = await removeFavorite(movie.id);
 
-            // Check if the movieIds were successfully updated
             if (response.movieIds && response.movieIds.length !== undefined) {
-                // Update the context state by filtering out the movie
-                setFavorites(response.movieIds); // Update favorites with the new list
+                setFavorites(response.movieIds);
                 toast.success("Removed from favorites successfully! 🎉", {
                     duration: 2000,
                 });

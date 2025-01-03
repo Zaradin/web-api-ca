@@ -12,6 +12,8 @@ A bullet-point list of the ADDITIONAL features you have implemented in the API *
 -   Account details page, (Username, email, account creation date, all reviews listed, and user favourites listed) is displayed
 -   Auth check for adding movies to favorites.
 -   Users movie reviews are now displayed in the account details page, also with a link to the review page
+-   Users favorites are stored in a mongodb collection
+-   Can add and remove favorites from the mongodb collection
 
 ## Setup requirements.
 
@@ -19,17 +21,15 @@ A bullet-point list of the ADDITIONAL features you have implemented in the API *
 
 ## API Configuration
 
-Describe any configuration that needs to take place before running the API. For example, creating an `.env` file and what variables to put in it. Give an example of how this might be done.
+Within the react-movies folder, create a .env file which should contain:<br>
+REACT*APP_TMDB_KEY=\_THE TMDB API KEY*
 
-REMEMBER: DON'T PUT YOUR OWN USERNAMES/PASSWORDS/AUTH KEYS IN THE README OR ON GITHUB, just placeholders as indicated below:
-
----
-
-NODEENV=development
-PORT=8080
-HOST=
-mongoDB=MyMongoDBURL
-seedDb=true
+Within the movies-api folder, create a .env file which should contain:<br>
+NODEENV=development<br>
+PORT=8080<br>
+HOST=localhost<br>
+mongoDB=mongodb+srv://_mongoAtlasUsername_:_mongoAtlasPassword_@cluster0.gbc02.mongodb.net/goodmovies?retryWrites=true&w=majority&appName=goodmovies<br>
+seedDb=true<br>
 secret=ilikecake
 
 ---
@@ -43,23 +43,45 @@ Give an overview of your web API design, perhaps similar to the following:
 -   /api/movies/movies | GET | Gets a list of movies
 -   /api/movies/tmdb/movie/{movieid} | GET | Gets a single movie
 -   /api/movies/tmdb/upcoming | GET | Get upcoming movies that are being released
+-   /api/movies/tmdb/getactordetails/${id} | GET | Gets an actors details (name, bio, image...)
+-   /api/movies/tmdb/getactormoviecredits/${id} | GET | Gets an actors movie credits based on actorId
+-   /api/movies/tmdb/getmoviecast/${id} | GET | Gets a movies cast based on movieId
 -   /api/movies/tmdb/trendingpeople | GET | Get a list of trending people on TMDB
+-   /api/movies/tmdb/getmoviebytitle/${title} | GET | Get a movie by a search query (search movies)
 -   /api/movies/tmdb/genre | GET | Get a list of different genres of movies and TV Shows on TMDB
 -   /api/movies/tmdb/{title} | GET | Get movies by a search title
 -   /api/movies/tmdb/movie/{movieid}/recommendations | GET | Get a list of recommendated movies similar to movieid
 -   /api/movies/tmdb/nowplaying/{page} | GET | Get a list of movies that are currently playing in theatres
-
-**USER** Endpoints
-
--   /api/users/ | POST | register a user or authenticate a user
 -   /api/users/userdetails | GET | Gets the currently logged in user details
 -   /api/users/reviews | GET | Get currently logged in users reviews stored in mongodb
+-   /api/movies/getfavorites | GET | Gets a users favorites from the favorites collection
 
 **POST** Endpoints
 
--   /api/movies/tmdb/movie/${id}/reviews | POST | Insert a movie review into the mongodb
+-   /api/users/ | POST | register a user or authenticate a user
+-   /api/movies/addfavorite | POST | Add a movie to a users favorites into the mongodb collection
+-   /api/movies/tmdb/movie/${id}/reviews | POST | Insert a movie review into the mongodb collection
+
+**DELETE** Endpoints
+
+-   /api/movies/removefavorite | DELETE | Deletes a users favorites by movieId
 
 If you have your API design on an online platform or graphic, please link to it (e.g. [Swaggerhub](https://app.swaggerhub.com/)).
+
+## Routes
+
+-   /
+-   /movies/upcoming
+-   /movies/:id
+-   /actor/:id
+-   /trending/people
+-   /search
+-   /movies/nowshowing
+-   /movie/:movieId/recommendations
+-   /signup
+-   /login
+
+Also contains more routes, which are protected, they are mentioned below.
 
 ## Security and Authentication
 
@@ -84,4 +106,4 @@ Also, movie reviews are now displayed in the user account details page. Any revi
 
 ## Independent learning (if relevant)
 
-Briefly explain any non-standard features developed for the app.
+Used reacts react-hot-toast library to show toasts instead of using the react MUI toast.
