@@ -10,9 +10,6 @@ const RemoveFromFavoritesIcon = ({ movie }) => {
     const handleRemoveFromFavorites = (e) => {
         e.preventDefault();
         context.removeFromFavorites(movie);
-        toast.success("Removed from favorites successfully! 🎉", {
-            duration: 2000,
-        });
     };
     return (
         <IconButton

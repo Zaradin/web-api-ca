@@ -190,4 +190,20 @@ router.get("/getfavorites", authenticate, async (req, res) => {
     }
 });
 
+router.delete("/removefavorite", authenticate, async (req, res) => {
+    try {
+        const { movieId } = req.body;
+
+        const favorites = await favoritesModel.findOneAndUpdate(
+            { userId: req.user._id },
+            { $pull: { movieIds: movieId } },
+            { new: true }
+        );
+
+        res.status(200).json(favorites);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to remove favorite" });
+    }
+});
+
 export default router;

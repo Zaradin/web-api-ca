@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addFavorite, getFavorites } from "../api/movies-api";
+import { addFavorite, getFavorites, removeFavorite } from "../api/movies-api";
 import toast from "react-hot-toast";
 
 export const MoviesContext = React.createContext(null);
@@ -44,7 +44,6 @@ const MoviesContextProvider = (props) => {
             newToWatch = [...toWatch];
         }
         setToWatch(newToWatch);
-        console.log(toWatch);
     };
 
     const addReview = (movie, review) => {
@@ -53,8 +52,24 @@ const MoviesContextProvider = (props) => {
     //console.log(myReviews);
 
     // We will use this function in the next step
-    const removeFromFavorites = (movie) => {
-        setFavorites(favorites.filter((mId) => mId !== movie.id));
+    const removeFromFavorites = async (movie) => {
+        try {
+            // Call the backend API to remove the favorite
+            const response = await removeFavorite(movie.id);
+
+            // Check if the movieIds were successfully updated
+            if (response.movieIds && response.movieIds.length !== undefined) {
+                // Update the context state by filtering out the movie
+                setFavorites(response.movieIds); // Update favorites with the new list
+                toast.success("Removed from favorites successfully! 🎉", {
+                    duration: 2000,
+                });
+            } else {
+                toast.error("Failed to remove favorite.");
+            }
+        } catch (error) {
+            console.error("Failed to remove favorite:", error);
+        }
     };
 
     return (

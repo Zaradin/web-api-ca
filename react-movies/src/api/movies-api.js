@@ -267,7 +267,7 @@ export const removeFavorite = async (movieId) => {
     const response = await fetch(
         "http://localhost:8080/api/movies/removefavorite",
         {
-            method: "POST",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: window.localStorage.getItem("token"),
