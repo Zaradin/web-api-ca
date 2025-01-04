@@ -66,7 +66,9 @@ Give an overview of your web API design, perhaps similar to the following:
 
 -   /api/movies/removefavorite | DELETE | Deletes a users favorites by movieId
 
-If you have your API design on an online platform or graphic, please link to it (e.g. [Swaggerhub](https://app.swaggerhub.com/)).
+### Swagger Hub Documentation
+
+I have also made the API endpoint documentation for all endpoints for the backend. It is avaiable to view here [Swaggerhub](https://app.swaggerhub.com/apis-docs/CROTTJJ/movies-api/1#/).
 
 ## Routes
 
